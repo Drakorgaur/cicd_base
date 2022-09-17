@@ -1,0 +1,12 @@
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  flow:
+    uses: ./.github/workflows/c_workflow.yml
+    with:
+      src: ./src
+      unit_tests: true
+      makefile: ./Makefile

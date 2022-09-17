@@ -1,0 +1,12 @@
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Run E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Echo the input
+        run: echo Run E2E tests

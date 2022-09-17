@@ -1,0 +1,19 @@
+on:
+  workflow_call:
+    inputs:
+      makefile:
+        required: true
+        type: string
+        default: 'Makefile'
+
+jobs:
+  pack:
+    name: Pack the project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Pack the project
+        run: |
+          cd $(dirname ${{ inputs.makefile }})
+          make pack

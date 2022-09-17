@@ -1,0 +1,56 @@
+on:
+  workflow_call:
+    inputs:
+      makefile:
+        required: true
+        type: string
+        default: 'Makefile'
+      src:
+        required: true
+        type: string
+        default: '.'
+      unit_tests:
+        type: string
+        default: 'false'
+
+jobs:
+  oclint:
+    name: Lint the project source
+    runs-on: ubuntu-latest
+    container: drakorgaur/oclint:latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Find project
+        run: |
+          find ${{ inputs.src }} -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp'
+      - name: Run OCLint
+        continue-on-error: true
+        run: |
+          oclint -report-type html -o oclint.html \
+            $(find ${{ inputs.src }} -name "*.h" -o -name "*.c") \ 
+            -- -c \
+            -Wextra \
+            -Wall \
+            -Wfloat-equal \
+            -Wundef \
+            -Wshadow \
+            -Wpointer-arith \
+            -Wstrict-prototypes
+      - name: Upload OCLint report
+        uses: actions/upload-artifact@v3
+        with:
+          name: oclint
+          path: oclint.html
+
+  unit_tests:
+    name: Run unit tests
+    if: ${{ inputs.unit_tests == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Run unit tests
+        run: |
+            cd $(dirname ${{ inputs.makefile }})
+            make test

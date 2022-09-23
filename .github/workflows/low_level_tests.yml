@@ -28,8 +28,7 @@ jobs:
         continue-on-error: true
         run: |
           oclint -report-type html -o oclint.html \
-            $(find ${{ inputs.src }} -name "*.h" -o -name "*.c") \ 
-            -- -c \
+            $(find . -name "*.h" -o -name "*.c") -- -c \
             -Wextra \
             -Wall \
             -Wfloat-equal \
@@ -37,11 +36,22 @@ jobs:
             -Wshadow \
             -Wpointer-arith \
             -Wstrict-prototypes
-      - name: Upload OCLint report
-        uses: actions/upload-artifact@v3
+      - name: Format OCLint report
+        if: always()
+        run: |
+          if [ -f oclint.html ]; then
+            echo report=$(cat oclint.html | sed -e 's/<head>.*<\/head>//g') | sed -e 's/\/__w\/cicd_base\/cicd_base\///g'>> $GITHUB_ENV
+          fi
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Comment Pull Request
+        uses: thollander/actions-comment-pull-request@v1.4.1
         with:
-          name: oclint
-          path: oclint.html
+          GITHUB_TOKEN: ${{ github.token }}
+          comment_includes: report
+          message: |
+            # Lint report
+            <details><summary>OCLINT</summary> ${{ env.report }} </details>
 
   unit_tests:
     name: Run unit tests

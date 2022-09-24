@@ -4,32 +4,25 @@ on:
       makefile:
         required: true
         type: string
-        default: 'Makefile'
-      src:
+        default: './Makefile'
+      binary:
         required: true
         type: string
-        default: '.'
-      unit_tests:
-        type: string
-        default: 'false'
 
 jobs:
-  low_level_tests:
-    uses: ./.github/workflows/low_level_tests.yml
-    with:
-      src: ${{ inputs.src }}
-      unit_tests: ${{ inputs.unit_tests }}
-      makefile: ${{ inputs.makefile }}
   compile:
-    needs: low_level_tests
     uses: ./.github/workflows/compile.yml
     with:
       makefile: ${{ inputs.makefile }}
+      binary: ${{ inputs.binary }}
   high_level_tests:
     needs: compile
     uses: ./.github/workflows/high_level_tests.yml
+    with:
+      binary: ${{ inputs.binary }}
   pack:
     needs: high_level_tests
     uses: ./.github/workflows/pack.yml
     with:
       makefile: ${{ inputs.makefile }}
+      binary: ${{ inputs.binary }}

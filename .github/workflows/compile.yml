@@ -5,6 +5,9 @@ on:
         required: true
         type: string
         default: 'Makefile'
+      binary:
+        required: true
+        type: string
 
 jobs:
   compile:
@@ -17,3 +20,8 @@ jobs:
         run: |
           cd $(dirname ${{ inputs.makefile }})
           make compile
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ inputs.binary }}
+          path: ./bin/${{ inputs.binary }}

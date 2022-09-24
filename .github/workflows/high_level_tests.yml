@@ -1,5 +1,9 @@
 on:
   workflow_call:
+    inputs:
+      binary:
+        required: true
+        type: string
 
 jobs:
   test:
@@ -8,5 +12,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+      - name: Download binary
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.binary }}
+          path: ./bin
+      - name: Run tests
+        run: |
+            chmod +x ./bin/${{ inputs.binary }}
+            ./bin/${{ inputs.binary }}
       - name: Echo the input
         run: echo Run E2E tests

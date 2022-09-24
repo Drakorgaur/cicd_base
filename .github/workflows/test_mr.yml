@@ -9,3 +9,4 @@ jobs:
     uses: ./.github/workflows/merge_master.yml
     with:
       makefile: ./Makefile
+      binary: 'compile'

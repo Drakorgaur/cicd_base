@@ -5,6 +5,9 @@ on:
         required: true
         type: string
         default: 'Makefile'
+      binary:
+        required: true
+        type: string
 
 jobs:
   pack:
@@ -13,7 +16,21 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+      - name: Download binary
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.binary }}
+          path: ./bin
       - name: Pack the project
         run: |
           cd $(dirname ${{ inputs.makefile }})
           make pack
+          artifact_tar=$(find . -name "*.tar.gz" | head -n 1)
+          echo "artifact_tar=$artifact_tar"
+          echo artifact_tar=$artifact_tar >> $GITHUB_ENV
+          echo artifact_name=$(basename $artifact_tar) >> $GITHUB_ENV
+      - name: Upload project
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.artifact_tar }}

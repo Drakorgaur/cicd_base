@@ -21,5 +21,5 @@ pack:
 	tar -czvf $(TAR_NAME).tar.gz $(SRC_D) $(BIN_D) README.md
 
 clean:
-	rm -rf $(PROJ_D)/$(BIN_D)
+	rm $(PROJ_D)/$(BIN_D)/*
 	rm -f $(PROJ_D)/$(TAR_NAME).tar.gz

@@ -1,13 +1,10 @@
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - 'master'
-      - 'main'
 
 jobs:
   flow:
-    uses: ./.github/workflows/c_workflow.yml
+    uses: ./.github/workflows/pull_request.yml
     with:
       src: ./src
       unit_tests: true

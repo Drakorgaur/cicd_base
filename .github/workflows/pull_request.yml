@@ -15,7 +15,7 @@ on:
 
 jobs:
   low_level_tests:
-    uses: ./.github/workflows/low_level_tests.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/low_level_tests.yml@master
     with:
       src: ${{ inputs.src }}
       unit_tests: ${{ inputs.unit_tests }}

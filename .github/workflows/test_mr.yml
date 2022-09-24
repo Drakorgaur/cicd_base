@@ -6,7 +6,7 @@ on:
 
 jobs:
   flow:
-    uses: ./.github/workflows/merge_master.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/merge_master.yml@master
     with:
       makefile: ./Makefile
       binary: 'compile'

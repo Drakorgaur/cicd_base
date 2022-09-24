@@ -4,7 +4,7 @@ on:
 
 jobs:
   flow:
-    uses: ./.github/workflows/pull_request.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/pull_request.yml@master
     with:
       src: ./src
       unit_tests: true

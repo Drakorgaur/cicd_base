@@ -11,18 +11,18 @@ on:
 
 jobs:
   compile:
-    uses: ./.github/workflows/compile.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/compile.yml@master
     with:
       makefile: ${{ inputs.makefile }}
       binary: ${{ inputs.binary }}
   high_level_tests:
     needs: compile
-    uses: ./.github/workflows/high_level_tests.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/high_level_tests.yml@master
     with:
       binary: ${{ inputs.binary }}
   pack:
     needs: high_level_tests
-    uses: ./.github/workflows/pack.yml
+    uses: Drakorgaur/cicd_base/.github/workflows/pack.yml@master
     with:
       makefile: ${{ inputs.makefile }}
       binary: ${{ inputs.binary }}

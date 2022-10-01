@@ -72,13 +72,23 @@ jobs:
 
   unit_tests:
     name: Run unit tests
+    runs-on: ubuntu-latest
     needs: check_for_changes
     if: ${{ needs.check_for_changes.outputs.changes == 'true' && inputs.unit_tests == 'true' }}
-    runs-on: ubuntu-latest
+    container: drakorgaur/google_test:latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+      - name: Copy tests
+        run: |
+          mkdir -p /unit/tests  
+          cp -r tests/* /unit/tests/
+      - name: Build unit tests
+        run: |
+          cd /unit \
+          && cmake -S . -B build \
+          && cmake --build build
       - name: Run unit tests
         run: |
-            cd $(dirname ${{ inputs.makefile }})
-            make test
+          cd /unit/build \
+          && ctest

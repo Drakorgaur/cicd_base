@@ -79,16 +79,10 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: Copy tests
-        run: |
-          mkdir -p /unit/tests  
-          cp -r tests/* /unit/tests/
       - name: Build unit tests
         run: |
-          cd /unit \
-          && cmake -S . -B build \
+          cmake -S . -B build \
           && cmake --build build
       - name: Run unit tests
         run: |
-          cd /unit/build \
-          && ctest
+          cd build && ctest

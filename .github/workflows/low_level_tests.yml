@@ -79,10 +79,15 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+      - name: Verify repo
+        run: |
+          tree
+      - name: Init unit tests
+        run: |
+          cmake -S . -B unit_tests 
       - name: Build unit tests
         run: |
-          cmake -S . -B unit_tests \
-          && cmake --build unit_tests
+          cmake --build unit_tests/ --target unit_tests
       - name: Run unit tests
         run: |
-            cd unit_tests && ctest
+          cd unit_tests && ctest
